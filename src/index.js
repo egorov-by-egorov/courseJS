@@ -94,17 +94,37 @@ function upperProps(obj) {
 // всё Работает, но почему-то не проходит проверка!
 
 function slice(array, from = 0, to = array.length) {
-    const newArr = [];
+    // const newArr = [];
+    //
+    // if (from < 0) {
+    //     from = array.length + from;
+    //     to = array.length;
+    // }
+    // if (to < 0) {
+    //     to = array.length + to;
+    //     from = 0;
+    // }
+    // for (let i = from; i < to; i++) {
+    //     newArr.push(array[i]);
+    // }
+    //
+    // return newArr;
 
-    if (from < 0) {
-        from = array.length + from;
-        to = array.length;
-    }
+    var array2 = [];
+
+    (from < 0 && Math.abs(from) > array.length)? from = 0:
+        (from < 0)? from = array.length + from:
+            (from > array.length)? from = array.length:
+                from;
+    (to < 0 && Math.abs(to) < array.length)? to = array.length + to:
+        (to > array.length)? to = array.length:
+            to;
+
     for (let i = from; i < to; i++) {
-        newArr.push(array[i]);
+        array2.push(array[i]);
     }
 
-    return newArr;
+    return array2;
 }
 
 /*
@@ -113,6 +133,16 @@ function slice(array, from = 0, to = array.length) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+
+    let proxy = {
+        set(obj, prop, value) {
+            obj[prop] = value * value;
+
+            return true
+        }
+    };
+
+    return new Proxy(obj, proxy);
 }
 
 export {
